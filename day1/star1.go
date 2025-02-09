@@ -2,18 +2,12 @@ package main
 
 import (
 	"fmt"
-	"os"
 	"sort"
 	"strconv"
 	"strings"
 )
 
-func main() {
-	data, err := os.ReadFile("./input")
-	check(err)
-
-	var testInput string = string(data)
-
+func star1(testInput string) {
 	var lines []string = splitLines(testInput)
 
 	var left, right []int = splitAndSortColumns(lines)
@@ -29,12 +23,6 @@ func main() {
 	fmt.Println(result)
 }
 
-func check(e error) {
-	if e != nil {
-		panic(e)
-	}
-}
-
 func splitLines(input string) []string {
 	var result []string
 
@@ -48,6 +36,15 @@ func splitLines(input string) []string {
 }
 
 func splitAndSortColumns(lines []string) ([]int, []int) {
+	left, right := split(lines)
+
+	sortColumn(&left)
+	sortColumn(&right)
+
+	return left, right
+}
+
+func split(lines []string) ([]int, []int) {
 	var left, right []int
 
 	for _, line := range lines {
@@ -69,9 +66,11 @@ func splitAndSortColumns(lines []string) ([]int, []int) {
 		right = append(right, rightInt)
 	}
 
-	sort.Ints(left)
-	sort.Ints(right)
 	return left, right
+}
+
+func sortColumn(array *[]int) {
+	sort.Ints(*array)
 }
 
 func calculateDistances(left []int, right []int) []int {
